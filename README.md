@@ -1,43 +1,73 @@
-# `AMARO front-end challenge` 
+# React + TypeScript + Vite
 
-This is our challenge for the front-end developer position at [@amarofashion](https://github.com/amarofashion).
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-You're probably already participating in our hiring process, but if you stumble here by accident, read the document to the end and if you are interested, you can start the process from here.
+Currently, two official plugins are available:
 
-If you are not a developer, you can have a look at our other opportunities at: [amaro.com/jobs](https://amaro.com/jobs)
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## About the challenge
+## React Compiler
 
-This is a challenge, not a college test, so there are multiple correct answers.
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-We'll give you some requirements that must be done and for which you'll be evaluated, but you're free to choose a solution method.
+## Expanding the ESLint configuration
 
-What we expect to learn from you with this challenge:
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-- Your work style.
-- How you think and solve problems.
-- How you communicate.
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-What we expect that you learn from us:
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-- How we work as a team.
-- Have a close look at some of the problems we face daily.
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
 
-## Next steps
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-1. Fork this repository to your personal account.
-2. Follow the instructions in the [`challenge-description`](/challenge-description.md) file.
-3. Solve the challenge in the best way you can.
-4. Send us a PR with your solution.
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## Considerations
-
-- We won't limit your choice of tools or libraries. But make choices that suits your needs. There's no need to use a bazooka to kill an ant but the point of the challenge is to evaluate your skills.
-- Despite not having a time limit, we recommend that you don't spend more than **10 to 12 hours** working on this challenge.
-- Try to write the best code you possibly can. It will make our life easier when evaluating your solution. And remember: you'll have to explain it in person for us.
-
-## Doubts?
-
-Do you have in doubt related to the process? Open an [issue](https://github.com/amaroteam/front-end-challenge/issues) and we'll be happy to help.
-
-**Break a leg!**
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
